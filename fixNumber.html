@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        .testTable{
+            border: 1px solid #aaa;
+            border-collapse: collapse;
+            font-size: 12px;
+            text-align: center;
+        }
+        .testTable *{
+            border: 1px solid #aaa;
+            width: 60px;
+            height: 40px;
+            line-height: 40px;
+        }
+    </style>
+</head>
+<body>
+    <input type="text" value="0" id="test">
+    <table class="testTable" >
+        <tr>
+            <th>项目</th>
+            <th>内容</th>
+            <th>金额</th>
+            <th>操作</th>
+            <th style="display: none">id</th>
+        </tr>
+        <tr>
+            <td>餐饮费</td>
+            <td>吃饭睡觉</td>
+            <td>100</td>
+            <td>删除</td>
+            <td style="display: none"></td>
+        </tr>
+    </table>
+    <span id="aaaabbbb"></span>
+    <span></span>
+    <span></span>
+    <span class="a22" id="bbbbb"></span>
+    <span class="a11" id="apsan" style="display: none;"></span>
+    <iframe id="tFrame" src="http://www.baidu.com" width="100px" height="80px" scrolling="yes" frameborder="0"></iframe>
+    <button id="tButton">testF</button>
+</body>
+<script>
+var test = document.querySelector('#test');
+var index = 0,
+    l = ['http://www.qq.com', 'http://www.163.com', 'http://www.sohu.com'];
+     document.querySelector('#tFrame').onload = function () {
+         console.log('frame onload');
+     }
+document.querySelector('#tButton').onclick = function () {
+    document.querySelector('#tFrame').src = l[index];
+    index++;
+}   
+//检测输入数据
+//============ 
+//@param [Object] ruleObj 检测规则
+// {
+//   maxLength: [Number] maxLength, 可输入最长长度
+//   rule: [String] checkRule, 检测规则
+// }
+//s{2}@d{10} d.dd email phoneNumber 
+
+function makeValidator(ruleObj) {
+    var contentLength = Object.keys(ruleObj);
+    if( contentLength.length < 1 ){
+        throw new Error('请输入至少一种验证规则!')
+        return false;
+    }
+    var rule, maxLength;
+    if( ruleObj.rule ) {
+        rule = ruleObj.rule;
+    }
+    if( ruleObj.maxLength 
+        && typeof parseInt(ruleObj.maxLength) === 'number' 
+        && parseInt(ruleObj.maxLength) > 0 ) {
+
+        maxLength = ruleObj.maxLength;
+    }
+
+    switch(rule){
+        case 'email' :
+            rule = emaliRule;
+            break;
+        case 'phoneNumber' :
+            rule = phoneNumberRule;
+            break;
+        case 'idCard' :
+            rule = idCardRule;
+            break;
+        default:
+            rule = parseRule( rule ); 
+    }
+
+    //通过字符串解析检测方法
+    function parseRule(rule) {
+
+    }
+} 
+
+
+
+
+
+//检测输入是否超过两位小数
+var maxTwoAfterDot = (function () {
+    var oldVal;
+    function focus() {
+        oldVal = this.value;
+    }
+    function input() {
+        if (this.value === '') return oldVal = this.value;
+        var len = this.value.length,
+            parsed = parseFloat(this.value);
+        if (isNaN(Number(this.value))) {
+            this.value = oldVal;
+        }
+        if (!checkNumber(parsed)) {
+            this.value = oldVal;
+            return false;
+        }
+        oldVal = this.value;
+    }
+    function blur() {
+        if (this.value === '') return;
+        this.value = parseFloat(this.value);
+        oldVal = this.value;
+    }
+
+    function checkNumber(number) {
+        var rule = /^\d+(\.\d{1,2})*$/;
+        return rule.test(number);
+    }
+
+    return {
+        input: input,
+        focus: focus,
+        blur: blur
+    };
+}());
+
+
+test.addEventListener('input', maxTwoAfterDot.input);
+test.addEventListener('focus', maxTwoAfterDot.focus);
+test.addEventListener('blur', maxTwoAfterDot.blur);
+
+function ajax(name, pass){
+    var XHR  = new XMLHttpRequest(),
+        data = { name: name, pass: pass }
+    XHR.open( 'POST','http://localhost:8069/catsic//userInfoController/login', true )
+    XHR.setRequestHeader('Content-type', 'application/JSON');
+   
+    XHR.addEventListener('readystatechange', function() {
+        console.log( XHR.responseText );
+    }, false);
+    XHR.send('name=' + name + '&pass=' + pass);
+}
+ajax('15236213541', '123');
+
+
+var spans = document.getElementsByTagName('span')
+</script>
+</html>
